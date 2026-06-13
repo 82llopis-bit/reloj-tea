@@ -1,357 +1,239 @@
-<!doctype html>
-
+<!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Reloj TEA · Panel de emociones</title>
-  <meta name="description" content="Panel visual de emociones por colores para el proyecto Reloj TEA." />
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Reloj TEA — ¿Cómo estás?</title>
   <style>
-    :root {
-      --bg: #f7f7f3;
-      --card: #ffffff;
-      --text: #1f2933;
-      --muted: #5f6b7a;
-      --border: rgba(31, 41, 51, 0.12);
-      --shadow: 0 18px 45px rgba(31, 41, 51, 0.12);
-
-      --red: #f06f6f;
-      --orange: #f5a55f;
-      --yellow: #f3d36b;
-      --blue: #7aa7df;
-      --green: #7ccf91;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
-      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #ffffff;
       min-height: 100vh;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: radial-gradient(circle at top, #ffffff 0%, var(--bg) 54%);
-      color: var(--text);
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 20px;
+      padding: 24px 16px;
     }
 
-    main {
-      width: min(100%, 520px);
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 28px;
-      box-shadow: var(--shadow);
-      padding: 24px;
+    .wrap {
+      width: 100%;
+      max-width: 360px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
     }
 
-    .top {
+    .titulo {
+      font-size: 22px;
+      font-weight: 600;
+      color: #1a1a1a;
       text-align: center;
-      margin-bottom: 18px;
     }
 
-    .watch {
-      width: 72px;
-      height: 72px;
-      margin: 0 auto 12px;
-      border: 5px solid #2f3a45;
-      border-radius: 50%;
-      display: grid;
-      place-items: center;
-      position: relative;
-      background: conic-gradient(
-        var(--red),
-        var(--orange),
-        var(--yellow),
-        var(--green),
-        var(--blue),
-        var(--red)
-      );
-    }
-
-    .watch::before,
-    .watch::after {
-      content: "";
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 28px;
-      height: 20px;
-      border: 4px solid #2f3a45;
-      border-radius: 10px;
-      background: #ffffff;
-    }
-
-    .watch::before {
-      top: -27px;
-    }
-
-    .watch::after {
-      bottom: -27px;
-    }
-
-    h1 {
-      font-size: clamp(1.6rem, 6vw, 2.2rem);
-      line-height: 1.1;
-      margin: 0 0 8px;
-    }
-
-    p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 1.05rem;
+    .subtitulo {
+      font-size: 15px;
+      color: #666;
+      text-align: center;
+      margin-top: -12px;
     }
 
     .grid {
-      display: grid;
-      gap: 12px;
-      margin-top: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      width: 100%;
     }
 
-    button {
-      width: 100%;
-      min-height: 78px;
-      border: 0;
-      border-radius: 22px;
-      padding: 14px 18px;
-      cursor: pointer;
+    .btn {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      font-size: 1.45rem;
-      font-weight: 750;
-      color: #1f2933;
-      transition: transform 0.12s ease, filter 0.12s ease;
+      gap: 18px;
+      width: 100%;
+      min-height: 76px;
+      padding: 0 22px;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: transform 0.12s ease;
+      -webkit-tap-highlight-color: transparent;
+      text-align: left;
     }
 
-    button:active {
-      transform: scale(0.98);
-      filter: saturate(1.08);
-    }
+    .btn:active { transform: scale(0.96); }
 
-    .emoji {
-      font-size: 2.3rem;
-      line-height: 1;
-    }
+    .emoji { font-size: 40px; line-height: 1; flex-shrink: 0; }
 
-    .red {
-      background: var(--red);
-    }
+    .nombre { font-size: 21px; font-weight: 600; }
 
-    .orange {
-      background: var(--orange);
-    }
+    .btn-rojo    { background: #FCEBEB; }
+    .btn-naranja { background: #FAEEDA; }
+    .btn-amarillo{ background: #FEFCE8; }
+    .btn-azul    { background: #E6F1FB; }
+    .btn-verde   { background: #EAF3DE; }
 
-    .yellow {
-      background: var(--yellow);
-    }
+    .nom-rojo    { color: #A32D2D; }
+    .nom-naranja { color: #854F0B; }
+    .nom-amarillo{ color: #6b5e00; }
+    .nom-azul    { color: #185FA5; }
+    .nom-verde   { color: #3B6D11; }
 
-    .blue {
-      background: var(--blue);
-    }
-
-    .green {
-      background: var(--green);
-    }
-
-    .result {
+    .confirmacion {
       display: none;
-      margin-top: 20px;
-      padding: 22px;
-      border-radius: 24px;
-      background: #f4f7fb;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
       text-align: center;
-      border: 1px solid var(--border);
+      animation: aparecer 0.25s ease;
+      width: 100%;
     }
 
-    .result.show {
-      display: block;
+    .confirmacion.visible { display: flex; }
+
+    .conf-emoji { font-size: 80px; line-height: 1; }
+
+    .conf-frase {
+      font-size: 20px;
+      font-weight: 600;
+      color: #1a1a1a;
+      line-height: 1.3;
+      max-width: 260px;
     }
 
-    .big-emoji {
-      font-size: 4rem;
-      line-height: 1;
-      margin-bottom: 10px;
-    }
+    .conf-gracias { font-size: 15px; color: #666; }
 
-    .result h2 {
-      margin: 0 0 8px;
-      font-size: 1.7rem;
-    }
-
-    .result p {
-      font-size: 1.15rem;
-      line-height: 1.35;
-    }
-
-    .adult {
-      margin-top: 14px;
-      padding: 14px;
-      border-radius: 18px;
-      background: #fff6e5;
-      color: #4a3414;
-      font-weight: 700;
-      line-height: 1.35;
-    }
-
-    .reset {
-      margin-top: 14px;
-      min-height: 52px;
-      justify-content: center;
-      font-size: 1rem;
-      background: #e8edf3;
-    }
-
-    footer {
+    .crisis-aviso {
+      display: none;
+      background: #FCEBEB;
+      border-radius: 16px;
+      padding: 16px 20px;
       text-align: center;
-      margin-top: 18px;
-      font-size: 0.85rem;
-      color: var(--muted);
+      font-size: 16px;
+      font-weight: 600;
+      color: #A32D2D;
+      width: 100%;
+    }
+
+    .crisis-aviso.visible { display: block; }
+
+    .btn-volver {
+      margin-top: 8px;
+      padding: 10px 28px;
+      border: 1.5px solid #ddd;
+      border-radius: 12px;
+      background: transparent;
+      cursor: pointer;
+      font-size: 15px;
+      color: #555;
+      font-family: inherit;
+      transition: background 0.15s;
+    }
+
+    .btn-volver:hover { background: #f5f5f5; }
+
+    @keyframes aparecer {
+      from { opacity: 0; transform: scale(0.88); }
+      to   { opacity: 1; transform: scale(1); }
     }
 
     @media (prefers-color-scheme: dark) {
-      :root {
-        --bg: #111827;
-        --card: #17202b;
-        --text: #f3f4f6;
-        --muted: #c4ccd7;
-        --border: rgba(255, 255, 255, 0.14);
-        --shadow: 0 18px 45px rgba(0, 0, 0, 0.35);
-      }
-
-      .watch::before,
-      .watch::after {
-        background: #17202b;
-      }
-
-      .result {
-        background: #202b38;
-      }
-
-      .adult {
-        background: #3b2c12;
-        color: #ffe7b3;
-      }
-
-      .reset {
-        background: #2d3745;
-        color: var(--text);
-      }
+      body { background: #111; }
+      .titulo { color: #f0f0f0; }
+      .subtitulo { color: #999; }
+      .btn-rojo    { background: #2a1010; }
+      .btn-naranja { background: #261a06; }
+      .btn-amarillo{ background: #222106; }
+      .btn-azul    { background: #0a1a2e; }
+      .btn-verde   { background: #111f08; }
+      .nom-rojo    { color: #f09595; }
+      .nom-naranja { color: #FAC775; }
+      .nom-amarillo{ color: #e8d56a; }
+      .nom-azul    { color: #85B7EB; }
+      .nom-verde   { color: #97C459; }
+      .conf-frase  { color: #f0f0f0; }
+      .conf-gracias{ color: #999; }
+      .btn-volver  { border-color: #444; color: #aaa; }
+      .btn-volver:hover { background: #222; }
+      .crisis-aviso { background: #2a1010; color: #f09595; }
     }
   </style>
-
 </head>
-
 <body>
-  <main aria-labelledby="titulo">
-    <section class="top">
-      <div class="watch" aria-hidden="true"></div>
-      <h1 id="titulo">¿Cómo estás?</h1>
-      <p>Señala una cara. Con eso basta.</p>
-    </section>
 
-```
-<section class="grid" aria-label="Panel de emociones">
-  <button
-    class="red"
-    type="button"
-    data-emotion="Agobiado"
-    data-emoji="😭"
-    data-message="Estás agobiado. No tienes que hablar."
-    data-adult="Adulto: baja estímulos, quédate cerca y habla poco."
-  >
-    <span>Agobiado</span>
-    <span class="emoji">😭</span>
-  </button>
+<div class="wrap">
+  <p class="titulo" id="titulo">¿Cómo estás ahora?</p>
+  <p class="subtitulo" id="subtitulo">Pulsa tu color</p>
 
-  <button
-    class="orange"
-    type="button"
-    data-emotion="Nervioso"
-    data-emoji="😰"
-    data-message="Estás nervioso. Vamos despacio."
-    data-adult="Adulto: ofrece una opción simple y deja tiempo para responder."
-  >
-    <span>Nervioso</span>
-    <span class="emoji">😰</span>
-  </button>
+  <div class="grid" id="grid">
+    <button class="btn btn-rojo"
+      onclick="elegir('😭','Agobiado','Estoy aquí contigo','crisis')">
+      <span class="emoji">😭</span>
+      <span class="nombre nom-rojo">Agobiado</span>
+    </button>
 
-  <button
-    class="yellow"
-    type="button"
-    data-emotion="Triste"
-    data-emoji="😢"
-    data-message="Estás triste. Gracias por decirlo."
-    data-adult="Adulto: acompaña sin interrogar. Puedes estar en silencio."
-  >
-    <span>Triste</span>
-    <span class="emoji">😢</span>
-  </button>
+    <button class="btn btn-naranja"
+      onclick="elegir('😰','Nervioso','Respira despacio. Estás a salvo','normal')">
+      <span class="emoji">😰</span>
+      <span class="nombre nom-naranja">Nervioso</span>
+    </button>
 
-  <button
-    class="blue"
-    type="button"
-    data-emotion="Bloqueado"
-    data-emoji="😶"
-    data-message="Estás bloqueado. Puedes señalar sin hablar."
-    data-adult="Adulto: no fuerces respuesta. Espera, acompaña y reduce estímulos."
-  >
-    <span>Bloqueado</span>
-    <span class="emoji">😶</span>
-  </button>
+    <button class="btn btn-amarillo"
+      onclick="elegir('😢','Triste','Estás triste y eso está bien. No estás solo','normal')">
+      <span class="emoji">😢</span>
+      <span class="nombre nom-amarillo">Triste</span>
+    </button>
 
-  <button
-    class="green"
-    type="button"
-    data-emotion="Bien"
-    data-emoji="🙂"
-    data-message="Estás bien. Gracias por decirlo."
-    data-adult="Adulto: valida la elección y permite que siga con calma."
-  >
-    <span>Bien</span>
-    <span class="emoji">🙂</span>
-  </button>
-</section>
+    <button class="btn btn-azul"
+      onclick="elegir('😶','Bloqueado','No tienes que hablar. Estoy aquí.','crisis')">
+      <span class="emoji">😶</span>
+      <span class="nombre nom-azul">Bloqueado</span>
+    </button>
 
-<section id="result" class="result" role="status" aria-live="polite">
-  <div id="bigEmoji" class="big-emoji"></div>
-  <h2 id="resultTitle"></h2>
-  <p id="resultMessage"></p>
-  <div id="adultMessage" class="adult"></div>
-  <button class="reset" type="button" onclick="resetPanel()">Volver a elegir</button>
-</section>
+    <button class="btn btn-verde"
+      onclick="elegir('🙂','Bien','¡Qué bien! Gracias por decirme','normal')">
+      <span class="emoji">🙂</span>
+      <span class="nombre nom-verde">Bien</span>
+    </button>
+  </div>
 
-<footer>Reloj TEA · Panel visual de emociones</footer>
-```
+  <div class="confirmacion" id="confirmacion">
+    <div class="conf-emoji" id="c-emoji"></div>
+    <div class="crisis-aviso" id="crisis-aviso">
+      Respira. Estoy contigo.
+    </div>
+    <p class="conf-frase" id="c-frase"></p>
+    <p class="conf-gracias">Gracias por decirme cómo estás</p>
+    <button class="btn-volver" onclick="volver()">Volver</button>
+  </div>
+</div>
 
-  </main>
-
-  <script>
-    const result = document.getElementById("result");
-    const bigEmoji = document.getElementById("bigEmoji");
-    const resultTitle = document.getElementById("resultTitle");
-    const resultMessage = document.getElementById("resultMessage");
-    const adultMessage = document.getElementById("adultMessage");
-
-    document.querySelectorAll("button[data-emotion]").forEach((button) => {
-      button.addEventListener("click", () => {
-        bigEmoji.textContent = button.dataset.emoji;
-        resultTitle.textContent = button.dataset.emotion;
-        resultMessage.textContent = button.dataset.message;
-        adultMessage.textContent = button.dataset.adult;
-        result.classList.add("show");
-        result.scrollIntoView({ behavior: "smooth", block: "center" });
-      });
-    });
-
-    function resetPanel() {
-      result.classList.remove("show");
-      window.scrollTo({ top: 0, behavior: "smooth" });
+<script>
+  function elegir(emoji, nombre, frase, tipo) {
+    document.getElementById('grid').style.display = 'none';
+    document.getElementById('titulo').style.display = 'none';
+    document.getElementById('subtitulo').style.display = 'none';
+    document.getElementById('c-emoji').textContent = emoji;
+    document.getElementById('c-frase').textContent = frase;
+    var aviso = document.getElementById('crisis-aviso');
+    if (tipo === 'crisis') {
+      aviso.classList.add('visible');
+    } else {
+      aviso.classList.remove('visible');
     }
-  </script>
+    document.getElementById('confirmacion').classList.add('visible');
+  }
+
+  function volver() {
+    document.getElementById('confirmacion').classList.remove('visible');
+    document.getElementById('crisis-aviso').classList.remove('visible');
+    document.getElementById('grid').style.display = 'flex';
+    document.getElementById('titulo').style.display = 'block';
+    document.getElementById('subtitulo').style.display = 'block';
+  }
+</script>
 
 </body>
 </html>
