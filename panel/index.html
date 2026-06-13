@@ -1,0 +1,266 @@
+```html
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Reloj TEA · Panel de emociones</title>
+  <meta name="description" content="Panel visual de emociones por colores para el proyecto Reloj TEA." />
+  <style>
+    :root {
+      --bg: #f7f7f3;
+      --card: #ffffff;
+      --text: #1f2933;
+      --muted: #5f6b7a;
+      --border: rgba(31, 41, 51, 0.12);
+      --shadow: 0 18px 45px rgba(31, 41, 51, 0.12);
+      --red: #f06f6f;
+      --orange: #f5a55f;
+      --yellow: #f3d36b;
+      --blue: #7aa7df;
+      --green: #7ccf91;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #ffffff 0%, var(--bg) 54%);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    main {
+      width: min(100%, 520px);
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      padding: 24px;
+    }
+
+    .top {
+      text-align: center;
+      margin-bottom: 18px;
+    }
+
+    .watch {
+      width: 72px;
+      height: 72px;
+      margin: 0 auto 12px;
+      border: 5px solid #2f3a45;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      position: relative;
+      background: conic-gradient(var(--red), var(--orange), var(--yellow), var(--green), var(--blue), var(--red));
+    }
+
+    .watch::before,
+    .watch::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 28px;
+      height: 20px;
+      border: 4px solid #2f3a45;
+      border-radius: 10px;
+      background: #ffffff;
+    }
+
+    .watch::before { top: -27px; }
+    .watch::after { bottom: -27px; }
+
+    h1 {
+      font-size: clamp(1.6rem, 6vw, 2.2rem);
+      line-height: 1.1;
+      margin: 0 0 8px;
+    }
+
+    p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+
+    .grid {
+      display: grid;
+      gap: 12px;
+      margin-top: 22px;
+    }
+
+    button {
+      width: 100%;
+      min-height: 78px;
+      border: 0;
+      border-radius: 22px;
+      padding: 14px 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 1.45rem;
+      font-weight: 750;
+      color: #1f2933;
+      transition: transform 0.12s ease, filter 0.12s ease;
+    }
+
+    button:active {
+      transform: scale(0.98);
+      filter: saturate(1.08);
+    }
+
+    .emoji {
+      font-size: 2.3rem;
+      line-height: 1;
+    }
+
+    .red { background: var(--red); }
+    .orange { background: var(--orange); }
+    .yellow { background: var(--yellow); }
+    .blue { background: var(--blue); }
+    .green { background: var(--green); }
+
+    .result {
+      display: none;
+      margin-top: 20px;
+      padding: 22px;
+      border-radius: 24px;
+      background: #f4f7fb;
+      text-align: center;
+      border: 1px solid var(--border);
+    }
+
+    .result.show { display: block; }
+
+    .big-emoji {
+      font-size: 4rem;
+      line-height: 1;
+      margin-bottom: 10px;
+    }
+
+    .result h2 {
+      margin: 0 0 8px;
+      font-size: 1.7rem;
+    }
+
+    .result p {
+      font-size: 1.15rem;
+      line-height: 1.35;
+    }
+
+    .adult {
+      margin-top: 14px;
+      padding: 14px;
+      border-radius: 18px;
+      background: #fff6e5;
+      color: #4a3414;
+      font-weight: 700;
+    }
+
+    .reset {
+      margin-top: 14px;
+      min-height: 52px;
+      justify-content: center;
+      font-size: 1rem;
+      background: #e8edf3;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 18px;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #111827;
+        --card: #17202b;
+        --text: #f3f4f6;
+        --muted: #c4ccd7;
+        --border: rgba(255, 255, 255, 0.14);
+        --shadow: 0 18px 45px rgba(0, 0, 0, 0.35);
+      }
+
+      .watch::before,
+      .watch::after { background: #17202b; }
+      .result { background: #202b38; }
+      .adult { background: #3b2c12; color: #ffe7b3; }
+      .reset { background: #2d3745; color: var(--text); }
+    }
+  </style>
+</head>
+<body>
+  <main aria-labelledby="titulo">
+    <section class="top">
+      <div class="watch" aria-hidden="true"></div>
+      <h1 id="titulo">¿Cómo estás?</h1>
+      <p>Señala una cara. Con eso basta.</p>
+    </section>
+
+    <section class="grid" aria-label="Panel de emociones">
+      <button class="red" type="button" data-emotion="Agobiado" data-emoji="😭" data-message="Estás agobiado. Busca un adulto ahora." data-adult="Busca a un adulto de confianza ahora mismo.">
+        <span>Agobiado</span><span class="emoji">😭</span>
+      </button>
+
+      <button class="orange" type="button" data-emotion="Nervioso" data-emoji="😰" data-message="Estás nervioso. Respira despacio." data-adult="Puedes pedir ayuda a un adulto.">
+        <span>Nervioso</span><span class="emoji">😰</span>
+      </button>
+
+      <button class="yellow" type="button" data-emotion="Triste" data-emoji="😢" data-message="Estás triste. Gracias por decirlo." data-adult="Puedes estar acompañado en silencio.">
+        <span>Triste</span><span class="emoji">😢</span>
+      </button>
+
+      <button class="blue" type="button" data-emotion="Bloqueado" data-emoji="😶" data-message="Estás bloqueado. No tienes que hablar." data-adult="Busca a un adulto. Puedes señalar sin hablar.">
+        <span>Bloqueado</span><span class="emoji">😶</span>
+      </button>
+
+      <button class="green" type="button" data-emotion="Bien" data-emoji="🙂" data-message="Estás bien. Gracias por decirlo." data-adult="Puedes seguir con lo que estabas haciendo.">
+        <span>Bien</span><span class="emoji">🙂</span>
+      </button>
+    </section>
+
+    <section id="result" class="result" role="status" aria-live="polite">
+      <div id="bigEmoji" class="big-emoji"></div>
+      <h2 id="resultTitle"></h2>
+      <p id="resultMessage"></p>
+      <div id="adultMessage" class="adult"></div>
+      <button class="reset" type="button" onclick="resetPanel()">Volver a elegir</button>
+    </section>
+
+    <footer>Reloj TEA · Panel visual de emociones</footer>
+  </main>
+
+  <script>
+    const result = document.getElementById('result');
+    const bigEmoji = document.getElementById('bigEmoji');
+    const resultTitle = document.getElementById('resultTitle');
+    const resultMessage = document.getElementById('resultMessage');
+    const adultMessage = document.getElementById('adultMessage');
+
+    document.querySelectorAll('button[data-emotion]').forEach((button) => {
+      button.addEventListener('click', () => {
+        bigEmoji.textContent = button.dataset.emoji;
+        resultTitle.textContent = button.dataset.emotion;
+        resultMessage.textContent = button.dataset.message;
+        adultMessage.textContent = button.dataset.adult;
+        result.classList.add('show');
+        result.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
+    });
+
+    function resetPanel() {
+      result.classList.remove('show');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  </script>
+</body>
+</html>
+```
